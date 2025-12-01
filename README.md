@@ -13,6 +13,24 @@ A minimal Ubuntu 22.04 Docker image for GitHub Actions self-hosted runners, opti
 - **Ephemeral Mode**: Runs as ephemeral runner (removes itself after job completion)
 - **Graceful Shutdown**: Properly deregisters from GitHub on container stop
 - **Minimal Footprint**: Optimized for Kubernetes deployments
+- **Automated Builds**: Docker image automatically built and published to GitHub Container Registry
+
+## Container Image
+
+The image is automatically built and published to GitHub Container Registry on every push to main branch and on tagged releases.
+
+### Pull the image
+
+```bash
+docker pull ghcr.io/pashkadez/selfhosted_runner_docker_image:latest
+```
+
+### Available tags
+
+- `latest` - Latest build from main branch
+- `v*` - Semantic versioned releases (e.g., `v1.0.0`, `1.0`, `1`)
+- `main` - Latest from main branch
+- `<commit-sha>` - Specific commit (full 40-character SHA)
 
 ## Quick Start
 
@@ -22,6 +40,17 @@ A minimal Ubuntu 22.04 Docker image for GitHub Actions self-hosted runners, opti
 - GitHub Personal Access Token (PAT) with appropriate permissions:
   - For repository runners: `repo` scope
   - For organization runners: `admin:org` scope
+
+### Using the Published Image
+
+```bash
+docker run -d \
+  --name github-runner \
+  -e GH_TOKEN=your_token \
+  -e GH_OWNER=your_owner \
+  -e GH_REPOSITORY=your_repo \
+  ghcr.io/pashkadez/selfhosted_runner_docker_image:latest
+```
 
 ### Using Docker Compose
 
@@ -55,7 +84,7 @@ A minimal Ubuntu 22.04 Docker image for GitHub Actions self-hosted runners, opti
    docker-compose logs -f
    ```
 
-### Using Docker CLI
+### Building Locally
 
 1. Build the image:
    ```bash
@@ -107,7 +136,7 @@ This image is optimized for use with the [GitHub Actions Runner Controller](http
 Extend the Dockerfile to add more tools as needed for your workflows:
 
 ```dockerfile
-FROM github-actions-runner:latest
+FROM ghcr.io/pashkadez/selfhosted_runner_docker_image:latest
 
 USER root
 RUN apt-get update && apt-get install -y your-package
@@ -121,6 +150,14 @@ Update the `RUNNER_VERSION` build argument:
 ```bash
 docker build --build-arg RUNNER_VERSION=2.320.0 -t github-actions-runner:latest .
 ```
+
+## CI/CD
+
+This repository uses GitHub Actions to automatically build and publish the Docker image:
+
+- **On push to main**: Builds and publishes with `latest` and commit SHA tags
+- **On tag push (v*)**: Publishes with semantic version tags
+- **On pull request**: Builds only (no push) for validation
 
 ## Troubleshooting
 

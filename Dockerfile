@@ -43,8 +43,9 @@ RUN useradd -m -s /bin/bash runner \
 # Set working directory
 WORKDIR /home/runner
 
-# Download and extract GitHub Actions runner
-RUN curl -L "https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz" -o actions-runner.tar.gz \
+# Download and extract GitHub Actions runner (architecture-aware)
+RUN RUNNER_ARCH=$(case ${TARGETARCH} in "amd64") echo "x64";; "arm64") echo "arm64";; *) echo "x64";; esac) \
+    && curl -L "https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-${RUNNER_ARCH}-${RUNNER_VERSION}.tar.gz" -o actions-runner.tar.gz \
     && tar -xzf actions-runner.tar.gz \
     && rm actions-runner.tar.gz \
     && chown -R runner:runner /home/runner \
