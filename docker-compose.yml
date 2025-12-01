@@ -19,8 +19,8 @@ services:
     volumes:
       # Mount Docker socket to allow running Docker commands
       - /var/run/docker.sock:/var/run/docker.sock
-      # Optional: Mount work directory for persistence
-      - runner-work:/home/runner/_work
+      # Optional: Mount work directory for persistence (uses RUNNER_WORKDIR if set, defaults to _work)
+      - runner-work:/home/runner/${RUNNER_WORKDIR:-_work}
     # Required for Docker-in-Docker capabilities
     privileged: false
     user: runner

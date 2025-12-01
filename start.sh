@@ -28,7 +28,7 @@ fi
 # Get registration token
 echo "Obtaining registration token..."
 RUNNER_TOKEN=$(curl -s -X POST \
-    -H "Authorization: token ${GH_TOKEN}" \
+    -H "Authorization: Bearer ${GH_TOKEN}" \
     -H "Accept: application/vnd.github.v3+json" \
     "${TOKEN_URL}" | jq -r '.token')
 
@@ -73,7 +73,7 @@ cleanup() {
     fi
     
     REMOVE_TOKEN=$(curl -s -X POST \
-        -H "Authorization: token ${GH_TOKEN}" \
+        -H "Authorization: Bearer ${GH_TOKEN}" \
         -H "Accept: application/vnd.github.v3+json" \
         "${REMOVE_TOKEN_URL}" | jq -r '.token')
     
@@ -87,6 +87,13 @@ trap 'cleanup; exit 0' SIGINT SIGTERM
 
 echo "Starting runner..."
 ./run.sh &
+RUNNER_PID=$!
 
-# Wait for runner process
-wait $!
+# Wait for runner process and capture exit status
+wait ${RUNNER_PID}
+EXIT_CODE=$?
+
+if [ ${EXIT_CODE} -ne 0 ]; then
+    echo "Runner process exited with error code: ${EXIT_CODE}"
+    exit ${EXIT_CODE}
+fi

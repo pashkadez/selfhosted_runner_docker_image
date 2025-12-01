@@ -54,8 +54,9 @@ RUN install -m 0755 -d /etc/apt/keyrings \
     && apt-get install -y --no-install-recommends docker-ce-cli docker-buildx-plugin \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Docker Compose
-RUN curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose \
+# Install Docker Compose (architecture-aware)
+RUN COMPOSE_ARCH=$(case ${TARGETARCH} in "amd64") echo "x86_64";; "arm64") echo "aarch64";; *) echo "x86_64";; esac) \
+    && curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-${COMPOSE_ARCH}" -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose
 
 # Install Node.js 18.x
@@ -88,13 +89,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gradle \
     && rm -rf /var/lib/apt/lists/*
 
-# Set JAVA_HOME
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+# Set JAVA_HOME (architecture-aware)
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-${TARGETARCH}
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
-# Install Go
+# Install Go (architecture-aware)
 ARG GO_VERSION=1.22.5
-RUN curl -L "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" -o go.tar.gz \
+RUN GO_ARCH=$(case ${TARGETARCH} in "amd64") echo "amd64";; "arm64") echo "arm64";; *) echo "amd64";; esac) \
+    && curl -L "https://go.dev/dl/go${GO_VERSION}.linux-${GO_ARCH}.tar.gz" -o go.tar.gz \
     && tar -C /usr/local -xzf go.tar.gz \
     && rm go.tar.gz
 ENV PATH="${PATH}:/usr/local/go/bin"
