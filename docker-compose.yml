@@ -13,16 +13,12 @@ services:
       - GH_OWNER=${GH_OWNER}
       - GH_REPOSITORY=${GH_REPOSITORY:-}
       - RUNNER_NAME=${RUNNER_NAME:-}
-      - RUNNER_LABELS=${RUNNER_LABELS:-self-hosted,Linux,X64,docker}
+      - RUNNER_LABELS=${RUNNER_LABELS:-self-hosted,Linux,X64}
       - RUNNER_WORKDIR=${RUNNER_WORKDIR:-_work}
       - RUNNER_GROUP=${RUNNER_GROUP:-Default}
     volumes:
-      # Mount Docker socket to allow running Docker commands
-      - /var/run/docker.sock:/var/run/docker.sock
       # Optional: Mount work directory for persistence (uses RUNNER_WORKDIR if set, defaults to _work)
       - runner-work:/home/runner/${RUNNER_WORKDIR:-_work}
-    # Required for Docker-in-Docker capabilities
-    privileged: false
     user: runner
     security_opt:
       - label:disable

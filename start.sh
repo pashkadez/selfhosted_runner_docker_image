@@ -41,7 +41,7 @@ fi
 RUNNER_NAME="${RUNNER_NAME:-$(hostname)}"
 
 # Set runner labels (default if not provided)
-RUNNER_LABELS="${RUNNER_LABELS:-self-hosted,Linux,X64,docker}"
+RUNNER_LABELS="${RUNNER_LABELS:-self-hosted,Linux,X64}"
 
 # Set runner work directory
 RUNNER_WORKDIR="${RUNNER_WORKDIR:-_work}"
