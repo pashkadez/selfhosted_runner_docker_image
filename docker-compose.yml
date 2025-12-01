@@ -1,0 +1,33 @@
+services:
+  github-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        RUNNER_VERSION: "2.321.0"
+    image: github-actions-runner:latest
+    container_name: github-runner
+    restart: unless-stopped
+    environment:
+      - GH_TOKEN=${GH_TOKEN}
+      - GH_OWNER=${GH_OWNER}
+      - GH_REPOSITORY=${GH_REPOSITORY:-}
+      - RUNNER_NAME=${RUNNER_NAME:-}
+      - RUNNER_LABELS=${RUNNER_LABELS:-self-hosted,Linux,X64}
+      - RUNNER_WORKDIR=${RUNNER_WORKDIR:-_work}
+      - RUNNER_GROUP=${RUNNER_GROUP:-Default}
+    volumes:
+      # Optional: Mount work directory for persistence (uses RUNNER_WORKDIR if set, defaults to _work)
+      - runner-work:/home/runner/${RUNNER_WORKDIR:-_work}
+    user: runner
+    security_opt:
+      - label:disable
+    networks:
+      - runner-network
+
+volumes:
+  runner-work:
+
+networks:
+  runner-network:
+    driver: bridge
