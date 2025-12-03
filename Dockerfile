@@ -6,8 +6,7 @@ ARG TARGETARCH=amd64
 # Prevents installdependencies.sh from prompting for input
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install minimal dependencies for GitHub Actions runner
-# Note: Keep image slim - add tools via workflow steps if needed
+# Install base packages (minimal dependencies for GitHub Actions runner)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     # Required for runner registration and API calls
     curl \
@@ -15,17 +14,30 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     jq \
     # Essential for most workflows
     git \
+    unzip \
+    zip \
+    sudo \
+    rsync \
+    openssh-client \
     # Libraries required by GitHub Actions runner
     libicu70 \
     libkrb5-3 \
     zlib1g \
     libssl3 \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean \
-    && rm -rf /tmp/* /var/tmp/*
+    # Additional utilities
+    locales \
+    tzdata \
+    && rm -rf /var/lib/apt/lists/*
 
-# Create a non-root user for the runner
-RUN useradd -m -s /bin/bash runner
+# Set locale
+RUN locale-gen en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+
+# Create a non-root user for the runner with sudo access
+RUN useradd -m -s /bin/bash runner \
+    && echo "runner ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Set working directory
 WORKDIR /home/runner
