@@ -1,3 +1,5 @@
+[![Build and Publish Docker Image](https://github.com/pashkadez/selfhosted_runner_docker_image/actions/workflows/build-and-publish.yml/badge.svg)](https://github.com/pashkadez/selfhosted_runner_docker_image/actions/workflows/build-and-publish.yml)
+
 # GitHub Actions Self-Hosted Runner Docker Image
 
 A minimal Ubuntu 22.04 Docker image for GitHub Actions self-hosted runners, optimized for use with GitHub Runner Controller in Kubernetes.
