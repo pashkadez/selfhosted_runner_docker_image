@@ -50,8 +50,8 @@ RUN RUNNER_ARCH=$(case ${TARGETARCH} in "amd64") echo "x64";; "arm64") echo "arm
     && rm actions-runner.tar.gz \
     && chown -R runner:runner /home/runner \
     && ./bin/installdependencies.sh \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy start script
 COPY --chown=runner:runner start.sh /home/runner/start.sh
