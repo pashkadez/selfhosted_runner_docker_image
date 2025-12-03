@@ -71,7 +71,7 @@ docker run -d \
    GH_OWNER=your_github_username_or_org
    GH_REPOSITORY=your_repository_name  # Optional: omit for org-level runner
    RUNNER_NAME=my-runner
-   RUNNER_LABELS=self-hosted,Linux,X64
+   RUNNER_LABELS=self-hosted,Linux,x64
    ```
 
 4. Start the runner:
@@ -109,7 +109,7 @@ docker run -d \
 | `GH_OWNER` | Yes | GitHub username or organization name |
 | `GH_REPOSITORY` | No | Repository name (omit for org-level runner) |
 | `RUNNER_NAME` | No | Custom runner name (defaults to hostname) |
-| `RUNNER_LABELS` | No | Comma-separated labels (default: `self-hosted,Linux,X64`) |
+| `RUNNER_LABELS` | No | Comma-separated labels (default: `self-hosted,Linux,x64`) |
 | `RUNNER_WORKDIR` | No | Work directory (default: `_work`) |
 | `RUNNER_GROUP` | No | Runner group for org runners (default: `Default`) |
 
