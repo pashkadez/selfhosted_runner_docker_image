@@ -7,8 +7,8 @@ A minimal Ubuntu 22.04 Docker image for GitHub Actions self-hosted runners, opti
 - **Base**: Ubuntu 22.04 LTS
 - **GitHub Actions Runner**: Latest version (v2.321.0)
 - **Pre-installed Tools**:
-  - Git, curl, wget, jq, rsync, openssh-client
-  - Essential utilities (zip, unzip, sudo)
+  - Git, curl, jq (minimal toolset)
+  - Additional tools can be added via workflow steps or custom images
 - **Automatic Registration**: Automatically registers with GitHub on startup
 - **Ephemeral Mode**: Runs as ephemeral runner (removes itself after job completion)
 - **Graceful Shutdown**: Properly deregisters from GitHub on container stop
@@ -120,10 +120,10 @@ docker run -d \
 | Ubuntu | 22.04 LTS |
 | GitHub Actions Runner | 2.321.0 |
 | Git | Latest |
-| curl, wget | Latest |
+| curl | Latest |
 | jq | Latest |
-| rsync | Latest |
-| openssh-client | Latest |
+
+> **Note**: This is a slim image. Install additional tools via workflow steps (`apt-get install`) or extend the image for your needs.
 
 ## Kubernetes Deployment
 
