@@ -31,6 +31,7 @@ RUN useradd -m -s /bin/bash runner
 WORKDIR /home/runner
 
 # Download, extract GitHub Actions runner, install deps, and cleanup in single layer
+# Note: installdependencies.sh runs apt-get, so we clean up after it too
 RUN RUNNER_ARCH=$(case ${TARGETARCH} in "amd64") echo "x64";; "arm64") echo "arm64";; *) echo "x64";; esac) \
     && curl -L "https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-${RUNNER_ARCH}-${RUNNER_VERSION}.tar.gz" -o actions-runner.tar.gz \
     && tar -xzf actions-runner.tar.gz \
