@@ -41,7 +41,7 @@ fi
 RUNNER_NAME="${RUNNER_NAME:-$(hostname)}"
 
 # Set runner labels (default if not provided)
-RUNNER_LABELS="${RUNNER_LABELS:-self-hosted,Linux,X64}"
+RUNNER_LABELS="${RUNNER_LABELS:-self-hosted,Linux,x64}"
 
 # Set runner work directory
 RUNNER_WORKDIR="${RUNNER_WORKDIR:-_work}"
@@ -51,16 +51,25 @@ RUNNER_GROUP="${RUNNER_GROUP:-Default}"
 
 # Configure the runner
 echo "Configuring runner..."
-./config.sh \
-    --url "${REGISTRATION_URL}" \
-    --token "${RUNNER_TOKEN}" \
-    --name "${RUNNER_NAME}" \
-    --labels "${RUNNER_LABELS}" \
-    --work "${RUNNER_WORKDIR}" \
-    --runnergroup "${RUNNER_GROUP}" \
-    --unattended \
-    --replace \
+
+# Build config command arguments
+CONFIG_ARGS=(
+    --url "${REGISTRATION_URL}"
+    --token "${RUNNER_TOKEN}"
+    --name "${RUNNER_NAME}"
+    --labels "${RUNNER_LABELS}"
+    --work "${RUNNER_WORKDIR}"
+    --unattended
+    --replace
     --ephemeral
+)
+
+# Only add runnergroup for organization-level runners (not repository-level)
+if [ -z "${GH_REPOSITORY}" ]; then
+    CONFIG_ARGS+=(--runnergroup "${RUNNER_GROUP}")
+fi
+
+./config.sh "${CONFIG_ARGS[@]}"
 
 # Cleanup function for graceful shutdown
 cleanup() {

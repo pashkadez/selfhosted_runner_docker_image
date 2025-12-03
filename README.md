@@ -7,7 +7,7 @@ A minimal Ubuntu 22.04 Docker image for GitHub Actions self-hosted runners, opti
 - **Base**: Ubuntu 22.04 LTS
 - **GitHub Actions Runner**: Latest version (v2.321.0)
 - **Pre-installed Tools**:
-  - Git, curl, wget, jq, rsync, openssh-client
+  - Git, curl, jq, rsync, openssh-client
   - Essential utilities (zip, unzip, sudo)
 - **Automatic Registration**: Automatically registers with GitHub on startup
 - **Ephemeral Mode**: Runs as ephemeral runner (removes itself after job completion)
@@ -71,7 +71,7 @@ docker run -d \
    GH_OWNER=your_github_username_or_org
    GH_REPOSITORY=your_repository_name  # Optional: omit for org-level runner
    RUNNER_NAME=my-runner
-   RUNNER_LABELS=self-hosted,Linux,X64
+   RUNNER_LABELS=self-hosted,Linux,x64
    ```
 
 4. Start the runner:
@@ -109,7 +109,7 @@ docker run -d \
 | `GH_OWNER` | Yes | GitHub username or organization name |
 | `GH_REPOSITORY` | No | Repository name (omit for org-level runner) |
 | `RUNNER_NAME` | No | Custom runner name (defaults to hostname) |
-| `RUNNER_LABELS` | No | Comma-separated labels (default: `self-hosted,Linux,X64`) |
+| `RUNNER_LABELS` | No | Comma-separated labels (default: `self-hosted,Linux,x64`) |
 | `RUNNER_WORKDIR` | No | Work directory (default: `_work`) |
 | `RUNNER_GROUP` | No | Runner group for org runners (default: `Default`) |
 
@@ -120,7 +120,7 @@ docker run -d \
 | Ubuntu | 22.04 LTS |
 | GitHub Actions Runner | 2.321.0 |
 | Git | Latest |
-| curl, wget | Latest |
+| curl | Latest |
 | jq | Latest |
 | rsync | Latest |
 | openssh-client | Latest |
