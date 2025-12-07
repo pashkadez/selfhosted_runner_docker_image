@@ -19,6 +19,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     sudo \
     rsync \
     openssh-client \
+    # Python and development tools
+    python3 \
+    python3-pip \
+    python3-venv \
+    # Required for Ansible/yamllint/ansible-lint
+    python3-dev \
+    build-essential \
     # Libraries required by GitHub Actions runner
     libicu70 \
     libkrb5-3 \
@@ -28,6 +35,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     locales \
     tzdata \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Python tools needed for linting and Ansible workflows
+RUN pip3 install --no-cache-dir \
+    ansible \
+    ansible-lint \
+    yamllint \
+    kubernetes \
+    netaddr \
+    jmespath \
+    dnspython
 
 # Set locale
 RUN locale-gen en_US.UTF-8
