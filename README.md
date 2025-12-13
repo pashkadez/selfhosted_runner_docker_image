@@ -6,8 +6,8 @@ A minimal Ubuntu 22.04 Docker image for GitHub Actions self-hosted runners, opti
 
 ## Features
 
-- **Base**: Ubuntu 22.04 LTS
-- **GitHub Actions Runner**: Latest version (v2.321.0)
+- **Base**: Official GitHub Actions Runner image (Ubuntu 22.04 LTS)
+- **GitHub Actions Runner**: Latest version (v2.330.0)
 - **Pre-installed Tools**:
   - Git, curl, jq, rsync, openssh-client
   - Essential utilities (zip, unzip, sudo)
@@ -32,6 +32,8 @@ docker pull ghcr.io/pashkadez/selfhosted_runner_docker_image:latest
 - `latest` - Latest build from main branch
 - `v*` - Semantic versioned releases (e.g., `v1.0.0`, `1.0`, `1`)
 - `main` - Latest from main branch
+- `<runner-version>` - Pinned to the GitHub Actions runner version baked into the image (e.g., `2.330.0`)
+- `runner-<runner-version>` - Explicit runner-version tag for clarity (e.g., `runner-2.330.0`)
 - `<commit-sha>` - Specific commit (full 40-character SHA)
 
 ## Quick Start
@@ -120,7 +122,7 @@ docker run -d \
 | Software | Version |
 |----------|---------|
 | Ubuntu | 22.04 LTS |
-| GitHub Actions Runner | 2.321.0 |
+| GitHub Actions Runner | 2.330.0 |
 | Git | Latest |
 | curl | Latest |
 | jq | Latest |
@@ -150,7 +152,7 @@ USER runner
 Update the `RUNNER_VERSION` build argument:
 
 ```bash
-docker build --build-arg RUNNER_VERSION=2.320.0 -t github-actions-runner:latest .
+docker build --build-arg RUNNER_VERSION=2.330.0 -t github-actions-runner:latest .
 ```
 
 ## CI/CD

@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        RUNNER_VERSION: "2.321.0"
+        RUNNER_VERSION: "2.330.0"
     image: github-actions-runner:latest
     container_name: github-runner
     restart: unless-stopped

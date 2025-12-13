@@ -6,14 +6,27 @@ set -euo pipefail
 
 echo "[entrypoint] uname: $(uname -a)"
 echo "[entrypoint] user: $(id)"
-echo "[entrypoint] runner dir: $PWD"
+echo "[entrypoint] runner dir (initial): $PWD"
 echo "[entrypoint] actions runner version: ${RUNNER_VERSION:-unknown}"
+
+if [[ ! -x ./bin/Runner.Listener ]]; then
+    for candidate in /actions-runner /home/runner/actions-runner; do
+        if [[ -x "${candidate}/bin/Runner.Listener" ]]; then
+            echo "[entrypoint] Switching to ${candidate}"
+            cd "${candidate}"
+            break
+        fi
+    done
+fi
 
 if [[ ! -x ./bin/Runner.Listener ]]; then
     echo "[entrypoint] ERROR: Runner binaries missing at ./bin/Runner.Listener" >&2
     ls -la ./bin || true
     exit 1
 fi
+
+echo "[entrypoint] runner dir (resolved): $PWD"
+export RUNNER_ASSETS_DIR=${RUNNER_ASSETS_DIR:-$PWD}
 
 export RUNNER_WORKDIR=${RUNNER_WORKDIR:-_work}
 mkdir -p "$RUNNER_WORKDIR"
